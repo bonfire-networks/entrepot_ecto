@@ -1,7 +1,7 @@
-defmodule Capsule.Ecto.Test.TestUser do
+defmodule Entrepot.Ecto.Test.TestUser do
   use Ecto.Schema
 
   schema "app_users" do
-    field(:attachment, Capsule.Ecto.Type)
+    field(:attachment, Entrepot.Ecto.Type)
   end
 end

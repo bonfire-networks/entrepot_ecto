@@ -1,3 +1,3 @@
 ExUnit.start()
 
-Application.put_env(:capsule_ecto, :default_storage, Capsule.Ecto.Test.TestStorage)
+Application.put_env(:entrepot_ecto, :default_storage, Entrepot.Ecto.Test.TestStorage)

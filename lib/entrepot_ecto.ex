@@ -1,4 +1,4 @@
-defmodule Capsule.Ecto do
+defmodule Entrepot.Ecto do
   def upload(changeset, params, permitted, func) when is_function(func, 2),
     do:
       do_upload(
@@ -22,7 +22,7 @@ defmodule Capsule.Ecto do
 
     Enum.reduce(params, changeset, fn {field, _} = params_pair, changeset ->
       with true <- Enum.member?(stringified_permitted, to_string(field)),
-           %Capsule.Locator{} = locator <-
+           %Entrepot.Locator{} = locator <-
              do_upload(locator_args |> Tuple.append([params_pair, changeset])) do
         Ecto.Changeset.cast(changeset, %{field => locator}, permitted)
       end

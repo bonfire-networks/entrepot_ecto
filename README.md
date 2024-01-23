@@ -1,32 +1,32 @@
-# CapsuleEcto
+# EntrepôtEcto
 
-Ecto integration for [Capsule](https://github.com/elixir-capsule/capsule)
+Ecto integration for [Entrepôt](https://github.com/bonfire-networks/entrepot)
 
-[![hex package](https://img.shields.io/hexpm/v/capsule_ecto.svg)](https://hex.pm/packages/capsule_ecto)
-[![CI status](https://github.com/elixir-capsule/capsule_ecto/workflows/CI/badge.svg)](https://github.com/elixir-capsule/capsulei_ecto/actions)
+[![hex package](https://img.shields.io/hexpm/v/entrepot_ecto.svg)](https://hex.pm/packages/entrepot_ecto)
+[![CI status](https://github.com/bonfire-networks/entrepot_ecto/workflows/CI/badge.svg)](https://github.com/bonfire-networks/capsulei_ecto/actions)
 
-This package adds the following two features to support the use of Capsule with Ecto:
+This package adds the following two features to support the use of Entrepôt with Ecto:
 
 1. Custom Type
 2. Changeset helper
 
-## Capsule.Ecto.Type
+## `Entrepot.Ecto.Type`
 
-In your Ecto schema specify your file field with the following type to get serialization of uploads (`Capsule.Locator`) to maps:
+In your Ecto schema specify your file field with the following type to get serialization of uploads (`Entrepot.Locator`) to maps:
 
 ```
 defmodule Attachment
   use Ecto.Schema
 
   schema "attachments" do
-    field :file_data, Capsule.Ecto.Type
+    field :file_data, Entrepot.Ecto.Type
   end
 end
 ```
 
-## Capsule.Ecto.upload
+## `Entrepot.Ecto.upload`
 
-Cast params to uploaded data with `Capsule.Ecto.upload`. In the style of Ecto.Multi, it accepts either an anonymous function or a module and function name, both with arity(2). The first argument passed will be a 2 element tuple representing the key/param pair and the second value will be the changeset.
+Cast params to uploaded data with `Entrepot.Ecto.upload`. In the style of Ecto.Multi, it accepts either an anonymous function or a module and function name, both with arity(2). The first argument passed will be a 2 element tuple representing the key/param pair and the second value will be the changeset.
 
 It is expected to return either a success tuple with the `Locator` struct or the changeset. In the latter case the changeset will simply be passed on down the pipe.
 
@@ -35,9 +35,9 @@ Even if you want to extract some metadata and apply a validation after you store
   ```
   %Attachment{}
   |> Ecto.Changeset.change()
-  |> Capsule.Ecto.upload(%{"file_data" => some_upload}, [:file_data], fn {_field, upload}, changeset ->
-      case Capsule.Storages.Disk.put(upload) do
-        {:ok, id} -> Capsule.Locator.new!(id: id, storage: Capsule.Storages.Disk)
+  |> Entrepot.Ecto.upload(%{"file_data" => some_upload}, [:file_data], fn {_field, upload}, changeset ->
+      case Entrepot.Storages.Disk.put(upload) do
+        {:ok, id} -> Entrepot.Locator.new!(id: id, storage: Entrepot.Storages.Disk)
         error_tuple -> add_error(changeset, "upload just...failed")
       end
   end)
@@ -50,7 +50,7 @@ However, if you want to do more complicated things with the upload before storin
   ```
   %Attachment{}
   |> Ecto.Changeset.change()
-  |> Capsule.Ecto.upload(%{"file_data" => some_upload}, [:file_data], MyApp.Attacher, :attach)
+  |> Entrepot.Ecto.upload(%{"file_data" => some_upload}, [:file_data], MyApp.Attacher, :attach)
   ```
 ---
 
@@ -64,7 +64,7 @@ One good option is to wrap your Repo operation in another function to handle bot
   def create_attachment(user, attrs) do
   %Attachment{}
   |> Ecto.Changeset.change()
-  |> Capsule.Ecto.upload(attrs, [:file_data], MyApp.Attacher, :attach)
+  |> Entrepot.Ecto.upload(attrs, [:file_data], MyApp.Attacher, :attach)
   |> Repo.insert()
   |> case do
     {:ok, attachment} = success_tuple ->
@@ -119,21 +119,21 @@ Since Locators are serialized as plain maps, it is easy to stub out file operati
 
 If you want to run tests on the actual file operations, you will need to make sure the id points to an actual file location that the configured storage understands.
 
-Or, if you are using [CapsuleSupplement](https://github.com/elixir-capsule/supplement), you can configure your test environment to use the RAM storage:
+Or, if you are using [CapsuleSupplement](https://github.com/bonfire-networks/supplement), you can configure your test environment to use the RAM storage:
 
   ```
-  {:ok, id} = Capsule.Storages.RAM.put(some_upload)
+  {:ok, id} = Entrepot.Storages.RAM.put(some_upload)
 
-  Repo.insert!(%Attachment{file_data: %{id: id, storage: Capsule.Storages.RAM}})
+  Repo.insert!(%Attachment{file_data: %{id: id, storage: Entrepot.Storages.RAM}})
   ```
 
 Or, for maximum performance, you can a simple struct that implements the `Upload` protocol:
 
   ```
-  defmodule Capsule.MockUpload do
+  defmodule Entrepot.MockUpload do
     defstruct content: "Hi, I'm a file", name: "hi"
 
-    defimpl Capsule.Upload do
+    defimpl Entrepot.Upload do
       def contents(mock), do: {:ok, mock.content}
 
       def name(mock), do: mock.name

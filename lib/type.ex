@@ -1,7 +1,7 @@
-defmodule Capsule.Ecto.Type do
+defmodule Entrepot.Ecto.Type do
   use Ecto.Type
 
-  alias Capsule.Locator
+  alias Entrepot.Locator
 
   def type, do: :map
 

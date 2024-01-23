@@ -1,9 +1,9 @@
-defmodule Capsule.Ecto.TypeTest do
+defmodule Entrepot.Ecto.TypeTest do
   use ExUnit.Case
-  doctest Capsule.Ecto
+  doctest Entrepot.Ecto
 
-  alias Capsule.Ecto.Type
-  alias Capsule.Locator
+  alias Entrepot.Ecto.Type
+  alias Entrepot.Locator
 
   describe "type/1 with locator" do
     test "wraps locator in success tuple" do

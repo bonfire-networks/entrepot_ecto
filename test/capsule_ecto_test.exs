@@ -1,15 +1,15 @@
-defmodule Capsule.EctoTest do
+defmodule Entrepot.EctoTest do
   use ExUnit.Case
-  doctest Capsule.Ecto
+  doctest Entrepot.Ecto
 
-  alias Capsule.Locator
-  alias Capsule.Ecto.Test.{TestUser, TestAttacher}
+  alias Entrepot.Locator
+  alias Entrepot.Ecto.Test.{TestUser, TestAttacher}
 
   describe "encapsulate/4" do
     test "adds the locator data to changeset" do
       assert %{changes: %{attachment: _}} =
                Ecto.Changeset.change(%TestUser{})
-               |> Capsule.Ecto.upload(%{attachment: %{}}, [:attachment], fn _, _ ->
+               |> Entrepot.Ecto.upload(%{attachment: %{}}, [:attachment], fn _, _ ->
                  %Locator{}
                end)
     end
@@ -17,7 +17,7 @@ defmodule Capsule.EctoTest do
     test "adds adds error to attachment field" do
       %{errors: errors} =
         Ecto.Changeset.change(%TestUser{})
-        |> Capsule.Ecto.upload(%{attachment: %{}}, [:attachment], fn _, changeset ->
+        |> Entrepot.Ecto.upload(%{attachment: %{}}, [:attachment], fn _, changeset ->
           Ecto.Changeset.add_error(changeset, :attachment, "wrong")
         end)
 
@@ -27,7 +27,7 @@ defmodule Capsule.EctoTest do
     test "adds the locator data to changeset when params have binary keys" do
       assert %{changes: %{attachment: _}} =
                Ecto.Changeset.change(%TestUser{})
-               |> Capsule.Ecto.upload(%{"attachment" => %{}}, [:attachment], fn _, _ ->
+               |> Entrepot.Ecto.upload(%{"attachment" => %{}}, [:attachment], fn _, _ ->
                  %Locator{}
                end)
     end
@@ -37,7 +37,7 @@ defmodule Capsule.EctoTest do
     test "adds the locator data to changeset" do
       assert %{changes: %{}} =
                Ecto.Changeset.change(%TestUser{})
-               |> Capsule.Ecto.upload(%{"what" => %{}}, [:attachment], fn _, _ ->
+               |> Entrepot.Ecto.upload(%{"what" => %{}}, [:attachment], fn _, _ ->
                  %Locator{}
                end)
     end
@@ -47,7 +47,7 @@ defmodule Capsule.EctoTest do
     test "adds the locator data to changeset" do
       assert %{changes: %{attachment: _}} =
                Ecto.Changeset.change(%TestUser{})
-               |> Capsule.Ecto.upload(
+               |> Entrepot.Ecto.upload(
                  %{attachment: %{}},
                  [:attachment],
                  TestAttacher,
