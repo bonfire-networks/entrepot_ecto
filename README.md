@@ -119,7 +119,7 @@ Since Locators are serialized as plain maps, it is easy to stub out file operati
 
 If you want to run tests on the actual file operations, you will need to make sure the id points to an actual file location that the configured storage understands.
 
-Or, if you are using [CapsuleSupplement](https://github.com/bonfire-networks/supplement), you can configure your test environment to use the RAM storage:
+You can configure your test environment to use the RAM storage:
 
   ```
   {:ok, id} = Entrepot.Storages.RAM.put(some_upload)
