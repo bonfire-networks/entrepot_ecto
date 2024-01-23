@@ -4,13 +4,13 @@ defmodule EntrepotEcto.MixProject do
   def project do
     [
       app: :entrepot_ecto,
-      version: "0.10.0",
+      version: "0.11.0",
       description: "Ecto integration for Entrepôt",
       elixir: "~> 1.10",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       elixirc_paths: elixirc_paths(Mix.env()),
-      name: "EntrepotEcto",
+      name: "EntrepôtEcto",
       source_url: "https://github.com/bonfire-networks/entrepot_ecto",
       package: package()
     ]
@@ -26,8 +26,8 @@ defmodule EntrepotEcto.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      # {:entrepot, "~> 0.10"},
-      {:entrepot, path: "../entrepot"},
+      {:entrepot, "~> 0.11"},
+      # {:entrepot, path: "../entrepot"},
       {:ecto, "~> 3.10"},
       {:ex_doc, ">= 0.0.0", only: :dev, runtime: false}
     ]
