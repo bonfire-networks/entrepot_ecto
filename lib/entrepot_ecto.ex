@@ -1,20 +1,56 @@
 defmodule Entrepot.Ecto do
-  def upload(changeset, params, permitted, func) when is_function(func, 2),
+  @moduledoc "./README.md" |> File.stream!() |> Enum.drop(1) |> Enum.join()
+
+  @doc """
+  Uploads data with `Entrepot` using a function.
+
+  ## Parameters
+  - `changeset`: The changeset to update.
+  - `params`: Parameters to upload.
+  - `permitted`: List of permitted fields.
+  - `function`: A function with arity 2 that handles the upload.
+
+  ## Examples
+
+      iex> changeset = %Ecto.Changeset{}
+      iex> fun = fn (_params, _changeset) -> %Entrepot.Locator{} end
+      iex> Entrepot.Ecto.upload(changeset, %{"field" => "value"}, ["field"], fun)
+      %Ecto.Changeset{}
+
+  """
+  def upload(changeset, params, permitted, fun) when is_function(fun, 2),
     do:
       do_upload(
         changeset,
         params,
         permitted,
-        {func}
+        {fun}
       )
 
-  def upload(changeset, params, permitted, mod, func_name),
+  @doc """
+  Uploads data with `Entrepot` using a module and function name.
+
+  ## Parameters
+  - `changeset`: The changeset to update.
+  - `params`: Parameters to upload.
+  - `permitted`: List of permitted fields.
+  - `module`: The module containing the function.
+  - `function`: The function name within the module.
+
+  ## Examples
+
+      iex> changeset = %Ecto.Changeset{}
+      iex> Entrepot.Ecto.upload(changeset, %{"field" => "value"}, ["field"], SomeModule, :some_function)
+      %Ecto.Changeset{}
+
+  """
+  def upload(changeset, params, permitted, module, func_name),
     do:
       do_upload(
         changeset,
         params,
         permitted,
-        {mod, func_name}
+        {module, func_name}
       )
 
   defp do_upload(changeset, params, permitted, locator_args) do
