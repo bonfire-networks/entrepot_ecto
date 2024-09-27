@@ -140,3 +140,6 @@ Or, for maximum performance, you can a simple struct that implements the `Upload
     end
   end
   ```
+
+---
+Note: Entrepôt was originally forked from [Capsule](https://github.com/elixir-capsule)
